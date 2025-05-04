@@ -12,5 +12,40 @@ class Generator:
         self.seed = (self.a * self.seed + self.c) % self.m
         return int(self.seed)
 
+    def next_double(self):
+        return math.fabs(self.next_int()) / self.m
+
+    """ generate random integer from range [start, end] both start and end are inclusive"""
     def next_int_from_to(self, start=0, end=10):
-        return int(math.fabs(self.next_int()) % end)
+        rng = end - start + 1
+        return start + int(math.fabs(self.next_int()) % rng)
+
+    """ generates random double from range [start, end] both start and end are inclusive"""
+    def next_double_from_to(self, start=0, end=10):
+        rng = end - start
+        return start + self.next_double() * rng
+
+    """ generate samples from exponential distribution with parameter lambda defined as lmbda"""
+    def next_from_exp(self, lmbda):
+        u = self.next_double()
+        while u == 0:
+            u = self.next_double()
+        return -math.log(u) / lmbda
+
+    """generates samples from bernoulli distribution with parameter p. Bernoulli distribution is also known as 
+    Alternating distribution"""
+    def next_from_bernoulli(self, p):
+        return 1 if self.next_double() < p else 0
+
+    # todo add other distributions geenration
+    def next_from_binomial(self, n, p):
+        return sum(self.next_from_bernoulli(p) for _ in range(n))
+
+    def next_from_geometric(self, p):
+        pass
+
+    def next_from_normal(self, mu=0, sigma=1):
+        pass
+
+    def next_from_poisson(self, lmbda):
+        pass
