@@ -37,15 +37,28 @@ class Generator:
     def next_from_bernoulli(self, p):
         return 1 if self.next_double() < p else 0
 
-    # todo add other distributions geenration
+    # todo add other distributions geenration and test their results
     def next_from_binomial(self, n, p):
         return sum(self.next_from_bernoulli(p) for _ in range(n))
 
     def next_from_geometric(self, p):
-        pass
+        u = self.next_double()
+        return math.floor(math.log(1 - u) / math.log(1 - p))
 
+    # todo check if this makes sense
     def next_from_normal(self, mu=0, sigma=1):
-        pass
+        u1 = self.next_double()
+        u2 = self.next_double()
+        z = math.sqrt(-2 * math.log(u1)) * math.cos(2 * math.pi * u2)
+        return mu + sigma * z
 
+    """ uses Knuths algorithm, tangible for small lambda"""
     def next_from_poisson(self, lmbda):
-        pass
+        L = math.exp(-lmbda)
+        k = 0
+        p = 1.0
+        while p > L:
+            k += 1
+            u = self.next_double()
+            p *= u
+        return k - 1
