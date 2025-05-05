@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from statsmodels.distributions.empirical_distribution import ECDF
 
+""" Generate histogram box-plot and Empirical distribution function for given dataset"""
+
 
 def generate_graphs_for_data(data, hist_bins=20):
     fig, axs = plt.subplots(3, 1, figsize=(8, 15))
@@ -28,6 +30,9 @@ def generate_graphs_for_data(data, hist_bins=20):
     axs[2].grid(True)
     axs[2].legend()
     plt.show()
+
+
+""" Plot the given Probability density function(PDF) and Cumulative density function(CDF)"""
 
 
 def plot_pdf_cdf(f_x, F_x, args_for_f=(), args_for_F=(), values_for_f=np.array([]), values_for_F=np.array([]),
@@ -65,6 +70,9 @@ def plot_pdf_cdf(f_x, F_x, args_for_f=(), args_for_F=(), values_for_f=np.array([
 
     plt.tight_layout()
     plt.show()
+
+
+""" Plot probabilities for each k possible(or Probability mass function PMF) and Cumulative density function(CDF)"""
 
 
 def plot_prob_cdf(f_x, F_x, args_for_f=(), args_for_F=(), values_for_f=np.array([]), values_for_F=np.array([]),
