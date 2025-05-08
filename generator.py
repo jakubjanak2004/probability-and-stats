@@ -37,7 +37,6 @@ class Generator:
     def next_from_bernoulli(self, p):
         return 1 if self.next_double() < p else 0
 
-    # todo add other distributions geenration and test their results
     def next_from_binomial(self, n, p):
         return sum(self.next_from_bernoulli(p) for _ in range(n))
 
@@ -62,3 +61,29 @@ class Generator:
             u = self.next_double()
             p *= u
         return k - 1
+
+    """Returns a random sample from custom discrete distribution specified by weights"""
+    def choices(self, values=(), weights=(), k=1):
+        if not values or not weights or len(weights) != len(values):
+            raise ValueError("Values and Weights must be non-empty and of same length")
+
+        # Normalise the weights if not
+        total_weight = sum(weights)
+        n_weights = [w / total_weight for w in weights]
+
+        # Create cumulative distribution
+        cumulative = []
+        cum_sum = 0
+        for w in n_weights:
+            cum_sum += w
+            cumulative.append(cum_sum)
+
+        samples = []
+        for _ in range(k):
+            r = self.next_double()
+            for i, threshold in enumerate(cumulative):
+                if r <= threshold:
+                    samples.append(values[i])
+                    break
+        return samples
+
